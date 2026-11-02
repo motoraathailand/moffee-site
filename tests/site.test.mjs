@@ -23,7 +23,8 @@ for (const [name, D] of [['INTRO', INTRO], ['JOIN', JOIN]]) {
 const C = makeContent({ OPERATOR: cfg.operator, EMAIL: cfg.contactEmail, UPDATED: cfg.policyDate, SITE: cfg.siteUrl });
 for (const n of ['PRIVACY', 'DELETE']) ok(`${n}: 5 languages, same number of sections and blocks`, L.every((l) => C[n][l] && C[n][l].length === C[n].en.length && C[n][l].every((s, i) => s[1].length === C[n].en[i][1].length)));
 for (const f of ['privacy.html', 'delete-account.html']) { const h = read(f); ok(`${f}: 5 language sections`, L.every((l) => h.includes(`id="s-${l}"`))); ok(`${f}: contact email present`, h.includes('mailto:' + cfg.contactEmail)); ok(`${f}: 18+ stated in every language`, L.every((l) => { const m = new RegExp(`id="s-${l}"[\\s\\S]*?</section>`).exec(h)[0]; return /18/.test(m); })); }
-ok('privacy: says no ads, no payment processing, no server, Bluetooth, Google sign-in + Drive', (() => { const e = C.PRIVACY.en.map((s) => s[0] + JSON.stringify(s[1])).join(' '); return /No ads/i.test(e) && /No payment processing/i.test(e) && /no server/i.test(e) && /Bluetooth/.test(e) && /Google sign-in and Google Drive/.test(e) && /drive\.file/.test(e); })());
+ok('privacy: free + AdMob banner ads (device identifiers), no payment processing, no server, Bluetooth, Google sign-in + Drive', (() => { const e = C.PRIVACY.en.map((s) => s[0] + JSON.stringify(s[1])).join(' '); return /banner ads/i.test(e) && /AdMob/.test(e) && /device identifiers/i.test(e) && /never full-screen/i.test(e) && !/No ads/i.test(e.replace(/no ads during (testing|development)/gi, '')) && /during testing/i.test(e) && /official release/i.test(e) && /No payment processing/i.test(e) && /no server/i.test(e) && /Bluetooth/.test(e) && /Google sign-in and Google Drive/.test(e) && /drive\.file/.test(e) && /name, email/.test(e); })());
+ok('privacy: every language has an Ads section that names AdMob', L.every((l) => C.PRIVACY[l].some((s) => JSON.stringify(s).includes('AdMob') && s[1].some((b) => b && b.ul))));
 ok('delete page: Drive records kept by default, deleted only with the option + PIN', /kept by default/.test(JSON.stringify(C.DELETE.en)) && /manager PIN/.test(JSON.stringify(C.DELETE.en)));
 ok('privacy mentions every permission in AndroidManifest (Bluetooth, Internet)', (() => { const mf = '/workspace/cafemenu-android/android/app/src/main/AndroidManifest.xml'; if (!fs.existsSync(mf)) return true; const m = fs.readFileSync(mf, 'utf8'); const perms = [...m.matchAll(/uses-permission android:name="android\.permission\.(\w+)"/g)].map((x) => x[1]); const e = JSON.stringify(C.PRIVACY.en); return perms.every((p) => /BLUETOOTH/.test(p) ? /Bluetooth/.test(e) : p === 'INTERNET' ? /Internet/.test(e) : false); })());
 // links and assets resolve
@@ -50,7 +51,7 @@ ok('only the shared group motoraa-testers is linked (no per-app group links)', [
 ok('no old per-app group names anywhere', !/aaai-testers|nammanthuk-testers|moffee-testers|cafemenu-testers|suayshot-testers/.test(all));
 const join = read('join.html');
 ok('join.html links: group, Play opt-in, store (same package)', join.includes(`href="${cfg.groupUrl}"`) && join.includes(`href="https://play.google.com/apps/testing/${cfg.packageName}"`) && join.includes(`href="https://play.google.com/store/apps/details?id=${cfg.packageName}"`));
-ok('join.html: 3 step cards, same-Gmail note, 7 FAQ entries', (join.match(/class="step"/g) || []).length === 3 && /Use the same Gmail/.test(join) && (join.match(/<details>/g) || []).length === 7);
+ok('join.html: 3 step cards, same-Gmail note, 8 FAQ entries', (join.match(/class="step"/g) || []).length === 3 && /Use the same Gmail/.test(join) && (join.match(/<details>/g) || []).length === 8);
 ok('join pages: all countries, no country restriction text', !/Thailand only|only in Thailand|เฉพาะผู้ที่อยู่ในประเทศไทย/.test(join + JSON.stringify(JOIN)));
 ok('optInLive=false locks steps 2-3 (and true would not)', cfg.optInLive ? !/data-locked/.test(join) : (join.match(/data-locked/g) || []).length === 2);
 ok('motion.css/js are byte copies of /workspace/shared/motion', ['motion.css', 'motion.js'].every((f) => !fs.existsSync('/workspace/shared/motion/' + f) || fs.readFileSync('/workspace/shared/motion/' + f).equals(fs.readFileSync(path.join(DOCS, 'assets', f)))));
@@ -72,8 +73,24 @@ if (hasApp) { const v = JSON.parse(read('app/version.json')); ok('app/version.js
   ok('Lucide licence recorded (LICENSES.md)', /Lucide[\s\S]*ISC/.test(fs.readFileSync(path.join(ROOT, 'LICENSES.md'), 'utf8')));
 }
 
+// ---------- owner decisions 2026-11-02: free + ad-supported, general-purpose, no cafe-only / subscription / "no ads" copy ----------
+{
+  const src = walk(DOCS).filter((f) => /\.(html|js|json|xml|txt)$/.test(f) && !/\/app\/content\.json$/.test(f)).map((f) => fs.readFileSync(f, 'utf8')).join('\n');
+  const FORBID = [/ไม่มีโฆษณา/, /\bno ads\b/i, /ad-free/i, /without ads/i, /광고가 (전혀 )?없/, /无广告/, /没有广告/, /完全没有广告/, /कोई विज्ञापन नहीं/, /subscription/i, /\bsubscribe/i, /\bpricing\b/i, /\bpremium\b/i, /per month/i, /สมัครสมาชิก/, /구독/, /订阅/, /सदस्यता/, /coffee shops?\b/i, /for coffee/i, /ร้านกาแฟเล็ก/, /작은 카페/, /커피숍/, /咖啡店/, /कॉफ़ी शॉप/];
+  const allowed = [/no ads that cover the screen/gi, /test version has no ads/gi, /no ads during (testing|development)/gi, /ช่วงทดสอบไม่แสดงโฆษณา/g, /테스트[^.]{0,30}?광고가 없/g, /测试[^。]{0,20}?没有广告/g, /टेस्टिंग[^।]{0,60}?कोई विज्ञापन नहीं/g]; const clean = allowed.reduce((t, r) => t.replace(r, ''), src);
+  const hits = FORBID.filter((r) => r.test(clean)).map(String);
+  ok('no "no ads" (except the allowed "No ads during testing") / ad-free / subscription / pricing / coffee-shop-only copy anywhere in the built site', hits.length === 0, hits.join(' '));
+  ok('every language says free + small banner ads on the intro (strings)', L.every((l) => /AdMob|banner|배너|แบนเนอร์|横幅|बैनर/.test(INTRO[l].freeH + INTRO[l].freeD + INTRO[l].chip2)));
+  ok('intro: free + banner ads + general-purpose wording (en)', /free/i.test(INTRO.en.lead) && /banner ads/i.test(INTRO.en.freeH) && /official release/i.test(INTRO.en.freeH) && /No ads during testing/.test(INTRO.en.freeN) && /full-screen/.test(INTRO.en.freeD) && /cafés, restaurants and shops/.test(INTRO.en.lead));
+  ok('old gold theme and old icon are gone (no #d4b062 / #17150f / #b08d3c in css, icon, pages)', !/#d4b062|#17150f|#b08d3c|#fbf7ee/i.test(src));
+  ok('new icon: blue Arch m favicon (#4f8ff7 -> #1d4ed8) and 192/512/apple-touch PNGs exist', /#4f8ff7/.test(read('assets/icon.svg')) && ['icon-192.png', 'icon-512.png', 'apple-touch-icon.png'].every((f) => fs.existsSync(path.join(DOCS, 'assets', f))));
+  ok('design tokens: accent #2563eb / #1d4ed8, light bg #f4f5f7, dark bg #0b0c10', ['#2563eb', '#1d4ed8', '#f4f5f7', '#0b0c10', '#12141a', '#15171c'].every((c) => read('assets/site.css').toLowerCase().includes(c)));
+  ok('screenshots on the intro page exist and are the v2 ones', ['shot-order-light', 'shot-order-dark', 'shot-manager', 'shot-cart-phone'].every((n) => fs.existsSync(path.join(DOCS, 'assets/img', n + '.webp')) && read('index.html').includes(n + '.webp')));
+  ok('join page keeps single shared group and says all countries (en)', /every country/i.test(JOIN.en.a6 + JOIN.en.desc) && read('join.html').includes('groups.google.com/g/motoraa-testers'));
+}
+
 // ---------- 2. browser ----------
-const { chromium } = createRequire('/workspace/fieldreport/package.json')('playwright-core');
+const { chromium } = (() => { for (const d of [process.env.PLAYWRIGHT_CORE_DIR, '/workspace/fieldreport', '/workspace/nammanthuk', '/workspace/project-reborn'].filter(Boolean)) { try { return createRequire(path.join(d, 'package.json'))('playwright-core'); } catch (e) {} } throw new Error('playwright-core not found; set PLAYWRIGHT_CORE_DIR'); })();
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.woff2': 'font/woff2', '.json': 'application/json', '.xml': 'application/xml', '.txt': 'text/plain' };
 const server = http.createServer((q, r) => { let p = decodeURIComponent(q.url.split('?')[0]); if (!p.startsWith('/moffee-site/')) { r.writeHead(404); return r.end(); } p = p.slice('/moffee-site'.length); let f = path.join(DOCS, p); if (fs.existsSync(f) && fs.statSync(f).isDirectory()) f = path.join(f, 'index.html'); if (!f.startsWith(DOCS) || !fs.existsSync(f)) { r.writeHead(404, { 'content-type': 'text/html' }); return r.end(fs.readFileSync(path.join(DOCS, '404.html'))); } r.writeHead(200, { 'content-type': MIME[path.extname(f)] || 'application/octet-stream', 'cache-control': 'no-store' }); fs.createReadStream(f).pipe(r); });
 await new Promise((res) => server.listen(0, '127.0.0.1', res));

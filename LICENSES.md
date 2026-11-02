@@ -1,6 +1,7 @@
 # Third-party licences (moffee-site)
 - Icons: Lucide (https://lucide.dev), ISC licence; a few icons derive from Feather (MIT). Inlined as SVG in `scripts/build.mjs`. Licence text: https://github.com/lucide-icons/lucide/blob/main/LICENSE
 - Fonts (IBM Plex Sans, IBM Plex Sans Thai): SIL Open Font License 1.1, files in `src/assets/fonts`.
+- App icon 'Arch m' and screenshots: own work (Motor AA / Moffee app).
 - Motion CSS/JS: own code (shared AA motion standard).
 
 # App update files (read by the Moffee app)
