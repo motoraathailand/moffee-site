@@ -22,14 +22,15 @@ Also: `/workspace/moffee-site/docs-promo/screenshots/share-card-og-1200x630.jpg`
 ## (a) One-line intro + key features
 
 ### ไทย (th) — PRIMARY, use this for all posts
-**Moffee — แอปรับออเดอร์หน้าร้านที่ใช้ฟรี สำหรับร้านกาแฟ ร้านอาหาร และร้านค้า ช่วงทดสอบไม่แสดงโฆษณา หลังเปิดตัวจริงมีแค่แบนเนอร์โฆษณาเล็ก ๆ ไม่แสดงโฆษณาเต็มจอ**
-- แตะรูปเมนูบนแท็บเล็ตหรือมือถือเพื่อรับออเดอร์ ใช้ออฟไลน์ได้
+**Moffee — แอปรับออเดอร์หน้าร้าน ใช้ฟรี ใช้ได้ทั้งแท็บเล็ตและมือถือ สำหรับร้านกาแฟ ร้านอาหาร และร้านค้า ช่วงทดสอบไม่แสดงโฆษณา หลังเปิดตัวจริงมีแค่แบนเนอร์โฆษณาเล็ก ๆ ไม่แสดงโฆษณาเต็มจอ**
+- ใช้ฟรี! ใช้ได้ทั้งแท็บเล็ตและมือถือ จะตั้งไว้ที่เคาน์เตอร์หรือถือเครื่องเดียวก็ได้
+- แตะรูปเมนูเพื่อรับออเดอร์ ใช้ออฟไลน์ได้
 - พิมพ์ใบร้านและใบลูกค้าตามแบบที่คุณออกแบบเอง (เครื่องพิมพ์ ESC/POS ผ่านบลูทูธหรือ Wi-Fi)
 - แตะครั้งเดียวได้รายงานปิดยอดรายวัน A4 เป็น PDF หรือรูป
 - ปุ่มใหญ่ มี PIN ผู้จัดการ พนักงานใหม่ใช้ได้ทันทีโดยไม่ต้องอบรม
 
 **Ready-to-paste Facebook post (Thai):**
-> มาร่วมทดสอบ Moffee แอปรับออเดอร์หน้าร้านที่ใช้ฟรี สำหรับร้านกาแฟ ร้านอาหาร และร้านค้า บน Android 📱
+> มาร่วมทดสอบ Moffee แอปรับออเดอร์หน้าร้าน ใช้ฟรี! ใช้ได้ทั้งแท็บเล็ตและมือถือ สำหรับร้านกาแฟ ร้านอาหาร และร้านค้า บน Android 📱
 > • แตะรูปเมนูเพื่อรับออเดอร์ ใช้ออฟไลน์ได้
 > • พิมพ์ใบร้านและใบลูกค้าตามแบบของคุณ
 > • ปิดยอดรายวันด้วยรายงาน A4 ฉบับเดียว
@@ -38,14 +39,14 @@ Also: `/workspace/moffee-site/docs-promo/screenshots/share-card-og-1200x630.jpg`
 
 ### Optional extras (website/hub only; not for posting)
 #### English (en)
-**Moffee — a free counter order app for cafés, restaurants and shops. No ads during testing; after the official release, only small banner ads (no ads that cover the screen).**
+**Moffee — a free counter order app for cafés, restaurants and shops, on both tablet and phone. No ads during testing; after the official release, only small banner ads (no ads that cover the screen).**
 - Tap menu photos on a tablet or phone to take orders — works offline
 - Prints store and customer tickets with your own design (ESC/POS Bluetooth or Wi-Fi printers)
 - One-tap daily A4 closing report as PDF or image
 - Big buttons and a manager PIN, so new staff can use it without training
 
 #### 한국어 (ko, draft)
-**Moffee — 카페·음식점·상점을 위한 무료 카운터 주문 앱. 테스트 기간에는 광고가 없고, 정식 출시 후에는 작은 배너 광고만 있어요(화면을 가리는 광고 없음).**
+**Moffee — 카페·음식점·상점을 위한 무료 카운터 주문 앱. 태블릿·휴대폰 모두 사용 가능. 테스트 기간에는 광고가 없고, 정식 출시 후에는 작은 배너 광고만 있어요(화면을 가리는 광고 없음).**
 - 태블릿이나 휴대폰에서 메뉴 사진을 눌러 주문받기, 오프라인에서도 동작
 - 내가 꾸민 디자인으로 매장용·고객용 티켓 출력(ESC/POS 블루투스·Wi-Fi 프린터)
 - 한 번에 A4 일일 마감 리포트를 PDF나 이미지로

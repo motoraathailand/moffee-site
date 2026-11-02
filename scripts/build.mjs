@@ -16,7 +16,7 @@ const C = makeContent({ OPERATOR: cfg.operator, EMAIL: cfg.contactEmail, UPDATED
 for (const name of ['PRIVACY', 'DELETE']) for (const l of L) { if (!C[name][l]) throw new Error(name + ' lacks ' + l); if (C[name][l].length !== C[name].en.length) throw new Error(name + '.' + l + ' has ' + C[name][l].length + ' sections, en has ' + C[name].en.length); }
 const I = INTRO, J = JOIN;
 // ---- helpers ----
-const ICON = { tap: '<path d="M14 4.1 12 6"/><path d="m5.1 8-2.9-.8"/><path d="m6 12-1.9 2"/><path d="M7.2 2.2 8 5.1"/><path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z"/>', print: '<path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/>', report: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>', lock: '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>', offline: '<path d="M12 20h.01"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/><path d="M5 12.859a10 10 0 0 1 5.17-2.69"/><path d="M19 12.859a10 10 0 0 0-2.007-1.523"/><path d="M2 8.82a15 15 0 0 1 4.177-2.643"/><path d="M22 8.82a15 15 0 0 0-11.288-3.764"/><path d="m2 2 20 20"/>', menu: '<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>', gift: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>', card: '<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>', login: '<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/>', shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>', ads: '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>', check: '<path d="M20 6 9 17l-5-5"/>' };
+const ICON = { tap: '<path d="M14 4.1 12 6"/><path d="m5.1 8-2.9-.8"/><path d="m6 12-1.9 2"/><path d="M7.2 2.2 8 5.1"/><path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z"/>', print: '<path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/>', report: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>', lock: '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>', offline: '<path d="M12 20h.01"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/><path d="M5 12.859a10 10 0 0 1 5.17-2.69"/><path d="M19 12.859a10 10 0 0 0-2.007-1.523"/><path d="M2 8.82a15 15 0 0 1 4.177-2.643"/><path d="M22 8.82a15 15 0 0 0-11.288-3.764"/><path d="m2 2 20 20"/>', menu: '<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>', gift: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>', card: '<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>', login: '<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/>', shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>', ads: '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>', check: '<path d="M20 6 9 17l-5-5"/>', tablet: '<rect width="20" height="15" x="2" y="4.500" rx="2" ry="2"/><path d="M18.500 12h.01"/>', phone: '<rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/>' };
 const svg = (n) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICON[n]}</svg>`;
 const attr = (tag, key, extra = '', dict = I) => `<${tag} data-t="${key}"${extra ? ' ' + extra : ''}>${esc(dict.en[key])}</${tag}>`;
 const LOGO = `<a class="logo" href="index.html" data-int aria-label="Moffee"><img src="assets/icon.svg" width="32" height="32" alt=""><span>Moffee</span></a>`;
@@ -68,7 +68,7 @@ const indexBody = `${HEADER(I)}
 <main id="main">
 <section class="hero"><div class="wrap hero-in">
   <div class="hero-copy" data-stagger>
-    ${attr('p', 'eyebrow', 'class="eyebrow"')}
+    <div class="flags"><span class="flag fr">${svg('gift')}${attr('b', 'flagFree')}</span><span class="flag dev">${svg('tablet')}${svg('phone')}${attr('span', 'flagDev')}</span></div>
     ${attr('h1', 'h1')}
     ${attr('p', 'lead', 'class="lead"')}
     <div class="cta"><a class="btn" data-press data-ripple data-int href="join.html">${JOIN_ICON}<span data-t="ctaJoin">${esc(I.en.ctaJoin)}</span></a><a class="btn ghost" data-press data-ripple href="#features"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg><span data-t="ctaMore">${esc(I.en.ctaMore)}</span></a></div>
@@ -82,12 +82,15 @@ const indexBody = `${HEADER(I)}
     ${attr('p', 'shotCap', 'class="cap"')}
   </div>
 </div></section>
+<section class="s devs"><div class="wrap">
+  <div class="devcard" data-reveal><div class="devicons"><span class="di">${svg('tablet')}${attr('em', 'devT')}</span><span class="di">${svg('phone')}${attr('em', 'devP')}</span></div><div>${attr('h2', 'devH')}${attr('p', 'devD')}</div></div>
+</div></section>
 <section class="s" id="features"><div class="wrap">
   ${attr('h2', 'featH')}
   <ul class="grid">${features.map(([ic, k], n) => `<li class="card" data-reveal style="--i:${n % 3}"><div class="ic">${svg(ic)}</div>${attr('h3', k + 't')}${attr('p', k + 'd')}</li>`).join('')}</ul>
 </div></section>
 <section class="s"><div class="wrap">
-  <div class="free" data-reveal><div class="ic">${svg('gift')}</div><div>${attr('h2', 'freeH')}${attr('p', 'freeD')}${attr('p', 'freeN', 'class="fn"')}</div></div>
+  <div class="free" data-reveal><div class="ic">${svg('gift')}</div><div>${attr('p', 'freeBig', 'class="fbig"')}${attr('h2', 'freeH')}${attr('p', 'freeD')}${attr('p', 'freeN', 'class="fn"')}</div></div>
 </div></section>
 <section class="s"><div class="wrap">
   ${attr('h2', 'shotsH')}${attr('p', 'shotsD', 'class="sub"')}
@@ -122,6 +125,7 @@ const joinBody = `${HEADER(J)}
 <main id="main">
 <section class="jhero"><div class="wrap narrow">
   ${attr('h1', 'h1', '', J)}
+  ${attr('p', 'jsub', 'class="jsub"', J)}
   <div class="gmail" role="note"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7.500l8 6 8-6"/></svg><div>${attr('b', 'gm', '', J)}${attr('span', 'gmD', '', J)}</div></div>
   <div class="prog"><div class="bar" aria-hidden="true"><i id="barFill"></i></div><p id="progTxt" aria-live="polite"></p></div>
 </div></section>
