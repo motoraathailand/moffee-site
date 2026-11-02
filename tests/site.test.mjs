@@ -151,11 +151,11 @@ for (const f of PAGES) for (const l of L) {
   ok('hub labels exact in 5 languages (INTRO + JOIN)', L.every((l) => INTRO[l].hub === LAB[l] && JOIN[l].hub === LAB[l]));
   for (const f of PAGES) for (const l of L) for (const [w, h] of [[412, 915], [1280, 800]]) {
     const p = await open(f + '?lang=' + l, { w, h, motion: 'reduce' });
-    const r = await p.evaluate(() => [...document.querySelectorAll('a[href="https://motoraathailand.github.io/"]')].map((a) => { const b = a.getBoundingClientRect(), v = a.querySelector('span'); return { h: Math.round(b.height), w: Math.round(b.width), svg: !!a.querySelector('svg'), text: v && v.textContent.trim(), label: a.getAttribute('aria-label') || '', shown: v && getComputedStyle(v).display !== 'none' }; }));
+    const r = await p.evaluate(() => [...document.querySelectorAll('a[href="https://motoraathailand.github.io/"]')].map((a) => { const b = a.getBoundingClientRect(), v = a.querySelector('span'); const sv = a.querySelector('svg'); return { h: Math.round(b.height), w: Math.round(b.width), svg: !!sv && sv.getBoundingClientRect().width >= 18, col: getComputedStyle(a).color, text: v && v.textContent.trim(), label: a.getAttribute('aria-label') || '', shown: v && getComputedStyle(v).display !== 'none' }; }));
     await p.evaluate(() => document.querySelector('.hub').scrollIntoView());
     const f2 = await p.evaluate(() => { const a = document.querySelector('a.hub'), b = a.getBoundingClientRect(); return b.height >= 48 && b.bottom <= innerHeight + 1 && b.top >= 0 && a.querySelector('svg') && a.textContent.trim(); });
     const hdr = r[0], ftr = r[1];
-    ok(`hub [${f} ${l} ${w}px]: header >=48px + icon (+label when wide), footer visible with icon + label`, r.length === 2 && hdr.h >= 48 && hdr.w >= 44 && hdr.svg && hdr.text === LAB[l] && hdr.label === LAB[l] && (w < 600 || hdr.shown) && ftr.h >= 48 && ftr.svg && ftr.shown && f2 === LAB[l] && (await p.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)), JSON.stringify(r));
+    ok(`hub [${f} ${l} ${w}px]: header >=48px + icon (+label when wide), footer visible with icon + label`, r.length === 2 && hdr.h >= 48 && hdr.w >= 44 && hdr.svg && hdr.text === LAB[l] && hdr.label === LAB[l] && (w < 600 || hdr.shown) && ftr.h >= 48 && ftr.svg && ftr.shown && ftr.col === 'rgb(255, 255, 255)' && f2 === LAB[l] && (await p.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)), JSON.stringify(r));
     await p.ctx.close();
   }
 }
