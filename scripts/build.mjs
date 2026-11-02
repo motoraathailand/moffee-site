@@ -75,8 +75,10 @@ const indexBody = `${HEADER(I)}
     <ul class="chips">${['chip1', 'chip2', 'chip3'].map((k) => `<li>${chk}<span data-t="${k}">${esc(I.en[k])}</span></li>`).join('')}</ul>
   </div>
   <div class="hero-vis m-rise">
-    <figure class="dev tablet"><img src="assets/img/shot-order-light.webp" width="1280" height="800" alt="${esc(I.en.shotAlt)}" data-alt="shotAlt" fetchpriority="high"></figure>
-    <figure class="dev phone"><img src="assets/img/shot-cart-phone.webp" width="412" height="915" alt="${esc(I.en.shotAlt2)}" data-alt="shotAlt2"></figure>
+    <div class="stage">
+      <figure class="dev tablet"><img src="assets/img/shot-order-light.webp" width="1280" height="800" alt="${esc(I.en.shotAlt)}" data-alt="shotAlt" fetchpriority="high"></figure>
+      <figure class="dev phone"><img src="assets/img/shot-cart-phone.webp" width="412" height="915" alt="${esc(I.en.shotAlt2)}" data-alt="shotAlt2"></figure>
+    </div>
     ${attr('p', 'shotCap', 'class="cap"')}
   </div>
 </div></section>
