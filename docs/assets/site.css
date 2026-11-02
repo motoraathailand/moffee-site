@@ -53,6 +53,15 @@ h1,h2,h3,p,ul,ol,figure{margin:0}
 .lang select option{color:#111;background:#fff}
 .back{color:var(--acc-ink);text-decoration:none;font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:6px;min-height:44px}
 
+/* app hub button (header + footer): always icon + label, >= 48px tall */
+.hd-r{display:flex;align-items:center;gap:8px}
+.hubh{min-height:48px;padding:0 14px;border-radius:var(--r2);font-size:15px;white-space:nowrap}
+.hubh span{display:none}
+.hubwrap{display:flex;justify-content:center;margin:0 0 22px}
+.btn.hub{min-height:56px;padding:12px 28px;font-size:17.5px}
+@media (min-width:600px){.hubh span{display:inline}}
+@media (max-width:420px){.hubh{width:48px;padding:0}.lang select{max-width:96px}}
+
 /* buttons */
 .btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:10px 24px;border:0;border-radius:var(--r2);background:var(--acc);color:var(--on-acc);font:inherit;font-size:17px;font-weight:600;text-decoration:none;cursor:pointer;box-shadow:0 1px 2px rgba(29,78,216,.3),0 10px 22px -12px rgba(37,99,235,.7);transition:transform var(--m-fast) var(--m-spring),background-color var(--m-fast) var(--m-ease)}
 .btn:hover{background:var(--acc-d)}

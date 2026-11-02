@@ -54,6 +54,7 @@ export const INTRO = {
     privacy: "นโยบายความเป็นส่วนตัว",
     del: "ขอลบข้อมูล",
     contact: "ติดต่อ",
+    hub: "ดูแอปทั้งหมด",
   },
   en: {
     langLabel: "Language",
@@ -107,6 +108,7 @@ export const INTRO = {
     privacy: "Privacy policy",
     del: "Delete your data",
     contact: "Contact",
+    hub: "See all apps",
   },
   ko: {
     title: "Moffee — 카페·음식점·상점을 위한 무료 카운터 주문 앱",
@@ -160,6 +162,7 @@ export const INTRO = {
     privacy: "개인정보 처리방침",
     del: "데이터 삭제",
     contact: "문의",
+    hub: "모든 앱 보기",
   },
   zh: {
     title: "Moffee — 适用于咖啡馆、餐厅和商店的免费柜台点单应用",
@@ -213,6 +216,7 @@ export const INTRO = {
     privacy: "隐私政策",
     del: "删除数据",
     contact: "联系",
+    hub: "查看全部应用",
   },
   hi: {
     title: "Moffee — कैफ़े, रेस्तरां और दुकानों के लिए मुफ़्त काउंटर ऑर्डर ऐप",
@@ -266,6 +270,7 @@ export const INTRO = {
     privacy: "गोपनीयता नीति",
     del: "डेटा हटाएँ",
     contact: "संपर्क",
+    hub: "सभी ऐप देखें",
   },
 };
 
@@ -336,6 +341,7 @@ export const JOIN = {
     back: "หน้าแรก Moffee",
     q8: "ต้องเข้าสู่ระบบไหม",
     a8: "ต้อง เมื่อเปิดแอปครั้งแรก เจ้าของร้านเข้าสู่ระบบด้วยบัญชี Google ข้อมูลการขายอยู่ในเครื่องและ Google Drive ของคุณเอง",
+    hub: "ดูแอปทั้งหมด",
   },
   en: {
     langLabel: "Language",
@@ -403,6 +409,7 @@ export const JOIN = {
     back: "Moffee home",
     q8: "Do I have to sign in?",
     a8: "Yes. When you first open the app, the owner signs in with a Google account. Your sales data stays on your device and your own Google Drive.",
+    hub: "See all apps",
   },
   ko: {
     langLabel: "언어",
@@ -470,6 +477,7 @@ export const JOIN = {
     back: "Moffee 홈",
     q8: "로그인해야 하나요?",
     a8: "네. 앱을 처음 열 때 사장님이 Google 계정으로 로그인해요. 매출 데이터는 내 기기와 내 Google Drive에만 있어요.",
+    hub: "모든 앱 보기",
   },
   zh: {
     langLabel: "语言",
@@ -537,6 +545,7 @@ export const JOIN = {
     back: "Moffee 首页",
     q8: "需要登录吗？",
     a8: "需要。首次打开应用时，店主用 Google 账号登录。销售数据只保存在你的设备和你自己的 Google Drive 中。",
+    hub: "查看全部应用",
   },
   hi: {
     langLabel: "भाषा",
@@ -604,5 +613,6 @@ export const JOIN = {
     back: "Moffee होम",
     q8: "क्या साइन-इन करना ज़रूरी है?",
     a8: "हाँ। ऐप पहली बार खोलने पर मालिक Google खाते से साइन-इन करते हैं। आपका बिक्री डेटा आपके डिवाइस और आपके अपने Google Drive में रहता है।",
+    hub: "सभी ऐप देखें",
   },
 };

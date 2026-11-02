@@ -43,7 +43,7 @@ for (const f of htmls) {
 ok('every relative link / asset / anchor in every page exists', bad.length === 0, bad.join(' | '));
 const css = read('assets/site.css'); ok('every url() in site.css exists', [...css.matchAll(/url\(([^)"']+)\)/g)].filter((m) => !m[1].startsWith('data:')).every((m) => fs.existsSync(path.join(DOCS, 'assets', m[1]))));
 ok('no external script or stylesheet anywhere (no tracking, no CDN)', htmls.every((f) => !/<(?:script|link)[^>]+(?:src|href)="https?:/.test(fs.readFileSync(f, 'utf8').replace(/<link rel="canonical"[^>]*>/g, ''))));
-ok('only the owner site/Play/group URLs appear as absolute links', htmls.every((f) => [...fs.readFileSync(f, 'utf8').matchAll(/(?:href|src)="(https?:[^"]+)"/g)].every((m) => m[1].startsWith(cfg.siteUrl) || m[1].startsWith(cfg.groupUrl) || m[1].startsWith('https://play.google.com/'))));
+ok('only the owner site/Play/group URLs appear as absolute links', htmls.every((f) => [...fs.readFileSync(f, 'utf8').matchAll(/(?:href|src)="(https?:[^"]+)"/g)].every((m) => m[1].startsWith(cfg.siteUrl) || m[1].startsWith(cfg.groupUrl) || m[1] === cfg.hubUrl || m[1].startsWith('https://play.google.com/'))));
 // the shared tester group only
 const all = walk(DOCS).filter((f) => /\.(html|js|json|xml|txt|svg)$/.test(f)).map((f) => fs.readFileSync(f, 'utf8')).join('\n') + fs.readFileSync(path.join(ROOT, 'config/site.json'), 'utf8') + fs.readFileSync(path.join(ROOT, 'src/strings.mjs'), 'utf8') + fs.readFileSync(path.join(ROOT, 'src/content.mjs'), 'utf8');
 const groups = new Set([...all.matchAll(/groups\.google\.com\/g\/([\w.-]+)/g)].map((m) => m[1])), mails = new Set([...all.matchAll(/([\w.-]+-testers)@googlegroups\.com/g)].map((m) => m[1]));
@@ -143,6 +143,21 @@ for (const f of PAGES) for (const l of L) {
   const m = await open('index.html'); await m.evaluate(() => window.scrollTo(0, 1500)); await sleep(150);
   const props = await m.evaluate(() => document.getAnimations().flatMap((a) => (a.effect && a.effect.getKeyframes ? a.effect.getKeyframes().flatMap((k) => Object.keys(k).filter((x) => !['offset', 'easing', 'composite', 'computedOffset'].includes(x))) : [])));
   ok('motion: only transform/opacity are animated', props.every((x) => ['transform', 'opacity'].includes(x)), [...new Set(props)].join()); await m.ctx.close();
+}
+// app hub button (owner rule 2026-11-02 13:45): visible, icon + label in 5 languages, >= 48px tall, on every page at both sizes
+{
+  const LAB = { th: 'ดูแอปทั้งหมด', en: 'See all apps', ko: '모든 앱 보기', zh: '查看全部应用', hi: 'सभी ऐप देखें' };
+  ok('hub link (https://motoraathailand.github.io/) is on all 4 pages (header + footer)', PAGES.every((f) => (read(f).match(/href="https:\/\/motoraathailand\.github\.io\/"/g) || []).length === 2));
+  ok('hub labels exact in 5 languages (INTRO + JOIN)', L.every((l) => INTRO[l].hub === LAB[l] && JOIN[l].hub === LAB[l]));
+  for (const f of PAGES) for (const l of L) for (const [w, h] of [[412, 915], [1280, 800]]) {
+    const p = await open(f + '?lang=' + l, { w, h, motion: 'reduce' });
+    const r = await p.evaluate(() => [...document.querySelectorAll('a[href="https://motoraathailand.github.io/"]')].map((a) => { const b = a.getBoundingClientRect(), v = a.querySelector('span'); return { h: Math.round(b.height), w: Math.round(b.width), svg: !!a.querySelector('svg'), text: v && v.textContent.trim(), label: a.getAttribute('aria-label') || '', shown: v && getComputedStyle(v).display !== 'none' }; }));
+    await p.evaluate(() => document.querySelector('.hub').scrollIntoView());
+    const f2 = await p.evaluate(() => { const a = document.querySelector('a.hub'), b = a.getBoundingClientRect(); return b.height >= 48 && b.bottom <= innerHeight + 1 && b.top >= 0 && a.querySelector('svg') && a.textContent.trim(); });
+    const hdr = r[0], ftr = r[1];
+    ok(`hub [${f} ${l} ${w}px]: header >=48px + icon (+label when wide), footer visible with icon + label`, r.length === 2 && hdr.h >= 48 && hdr.w >= 44 && hdr.svg && hdr.text === LAB[l] && hdr.label === LAB[l] && (w < 600 || hdr.shown) && ftr.h >= 48 && ftr.svg && ftr.shown && f2 === LAB[l] && (await p.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)), JSON.stringify(r));
+    await p.ctx.close();
+  }
 }
 await browser.close(); server.close();
 console.log(`\n${pass} passed, ${fail} failed`); process.exit(fail ? 1 : 0);

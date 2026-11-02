@@ -7,7 +7,7 @@ import { INTRO, JOIN } from '../src/strings.mjs';
 import { LANGS, SOCIAL, makeContent } from '../src/content.mjs';
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..'), SRC = path.join(ROOT, 'src'), OUT = path.join(ROOT, 'docs');
 const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, 'config/site.json'), 'utf8'));
-for (const k of ['siteUrl', 'packageName', 'groupEmail', 'groupUrl', 'optInUrl', 'installUrl', 'contactEmail', 'operator', 'policyDate']) if (!cfg[k]) throw new Error('config/site.json: missing ' + k);
+for (const k of ['siteUrl', 'packageName', 'groupEmail', 'groupUrl', 'optInUrl', 'installUrl', 'hubUrl', 'contactEmail', 'operator', 'policyDate']) if (!cfg[k]) throw new Error('config/site.json: missing ' + k);
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const L = LANGS.map((x) => x[0]), SITE = cfg.siteUrl;
 // ---- completeness: every language has every key / section ----
@@ -21,8 +21,11 @@ const svg = (n) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICON[n]}</svg>
 const attr = (tag, key, extra = '', dict = I) => `<${tag} data-t="${key}"${extra ? ' ' + extra : ''}>${esc(dict.en[key])}</${tag}>`;
 const LOGO = `<a class="logo" href="index.html" data-int aria-label="Moffee"><img src="assets/icon.svg" width="32" height="32" alt=""><span>Moffee</span></a>`;
 const LANGSEL = (dict) => `<label class="lang"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.200 3 14.800 0 18M12 3c-3 3.200-3 14.800 0 18"/></svg><select id="lang" data-aria="langLabel" aria-label="${esc(dict.en.langLabel)}">${LANGS.map(([l, n]) => `<option value="${l}"${l === 'en' ? ' selected' : ''}>${esc(n)}</option>`).join('')}</select></label>`;
-const HEADER = (dict) => `<header class="hd"><div class="hd-in">${LOGO}${LANGSEL(dict)}</div></header>`;
-const FOOTER = (dict, madeKey) => `<footer class="ft"><div class="wrap"><div class="links"><a href="privacy.html" data-int data-t="privacy">${esc(dict.en.privacy)}</a><a href="delete-account.html" data-int data-t="del">${esc(dict.en.del)}</a><a href="mailto:${esc(cfg.contactEmail)}" data-t="contact">${esc(dict.en.contact)}</a></div>${madeKey ? `<p data-t="${madeKey}">${esc(dict.en[madeKey])}</p>` : ''}</div></footer>`;
+const HUB_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>';
+const HUB_HEAD = (dict) => `<a class="btn soft hubh" data-press data-ripple href="${esc(cfg.hubUrl)}" data-aria="hub" aria-label="${esc(dict.en.hub)}">${HUB_SVG}<span data-t="hub">${esc(dict.en.hub)}</span></a>`;
+const HUB_BAND = (dict) => `<div class="hubwrap"><a class="btn hub" data-press data-ripple href="${esc(cfg.hubUrl)}">${HUB_SVG}<span data-t="hub">${esc(dict.en.hub)}</span></a></div>`;
+const HEADER = (dict) => `<header class="hd"><div class="hd-in">${LOGO}<div class="hd-r">${HUB_HEAD(dict)}${LANGSEL(dict)}</div></div></header>`;
+const FOOTER = (dict, madeKey) => `<footer class="ft"><div class="wrap">${HUB_BAND(dict)}<div class="links"><a href="privacy.html" data-int data-t="privacy">${esc(dict.en.privacy)}</a><a href="delete-account.html" data-int data-t="del">${esc(dict.en.del)}</a><a href="mailto:${esc(cfg.contactEmail)}" data-t="contact">${esc(dict.en.contact)}</a></div>${madeKey ? `<p data-t="${madeKey}">${esc(dict.en[madeKey])}</p>` : ''}</div></footer>`;
 // language chosen BEFORE first paint (no flash): ?lang= > saved > browser primary tag > English. Non-English keeps the page hidden (html.lw) until site.js has swapped the baked English text (fails open after 1.5 s).
 const HEAD_SCRIPT = `<script>/* language first: ?lang= > saved choice > browser language (th/en/ko/zh/hi by primary subtag) > English */
 (function(){var L=['th','en','ko','zh','hi'],l='en',x=0,d=document.documentElement;try{var m=/[?&]lang=(\\w\\w)/.exec(location.search),s=localStorage.getItem('moffee.site.lang'),a=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language],p='';if(m&&L.indexOf(m[1])>-1){l=m[1];x=1}else if(L.indexOf(s)>-1){l=s;x=1}else for(var i=0;i<a.length;i++){p=String(a[i]||'').toLowerCase().split(/[-_]/)[0];if(L.indexOf(p)>-1){l=p;break}}}catch(e){}window.__L=l;window.__LX=x;d.lang=l==='zh'?'zh-Hans':l;d.setAttribute('data-lang',l);if(l!=='en'){d.className+=' lw';setTimeout(function(){d.className=d.className.replace(/\\blw\\b/,'')},1500)}})();</script>`;
@@ -143,7 +146,7 @@ const mail = (s) => esc(s).replace(new RegExp(esc(cfg.contactEmail).replace(/\./
 const blocks = (bs) => bs.map((b) => typeof b === 'string' ? `<p>${mail(b)}</p>` : b.ul ? `<ul>${b.ul.map((x) => `<li>${mail(x)}</li>`).join('')}</ul>` : `<ol>${b.ol.map((x) => `<li>${mail(x)}</li>`).join('')}</ol>`).join('');
 function legal({ file, titleKey, content, otherFile, otherKey }) {
   const sections = LANGS.map(([l]) => { const U = C.UI[l]; return `<section class="lg" lang="${l === 'zh' ? 'zh-Hans' : l}" id="s-${l}"><h1>${esc(U[titleKey])}</h1><p class="meta">${esc(U.app)} · ${esc(U.updated)}: ${esc(cfg.policyDate)}</p>${content[l].map(([h, b]) => `<h2>${esc(h)}</h2>${blocks(b)}`).join('')}<p class="links"><a href="${otherFile}" data-int>${esc(U[otherKey])}</a></p></section>`; }).join('\n');
-  const body = `<header class="hd"><div class="hd-in"><a class="back" href="index.html" data-int>← <span data-t="home">${esc(I.en.home)}</span></a>${LANGSEL(I)}</div></header>
+  const body = `<header class="hd"><div class="hd-in"><a class="back" href="index.html" data-int>← <span data-t="home">${esc(I.en.home)}</span></a><div class="hd-r">${HUB_HEAD(I)}${LANGSEL(I)}</div></div></header>
 <main id="main" class="wrap narrow legal${file === 'privacy.html' ? ' privacy' : ' delete'}">
 ${sections}
 </main>
