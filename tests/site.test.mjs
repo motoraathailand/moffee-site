@@ -50,8 +50,9 @@ const groups = new Set([...all.matchAll(/groups\.google\.com\/g\/([\w.-]+)/g)].m
 ok('only the shared group motoraa-testers is linked (no per-app group links)', [...groups].every((g) => g === 'motoraa-testers') && [...mails].every((g) => g === 'motoraa-testers') && groups.has('motoraa-testers'), [...groups, ...mails].join());
 ok('no old per-app group names anywhere', !/aaai-testers|nammanthuk-testers|moffee-testers|cafemenu-testers|suayshot-testers/.test(all));
 const join = read('join.html');
+ok('join: no FAQ section in any language (owner rule 2026-11-11: no FAQ on tester/join pages)', !/faqH|data-t=\"q\\d|자주 묻는|คำถามที่พบบ่อย|常见问题|अक्सर पूछे|FAQPage|#faq/i.test(join) && Object.keys(JOIN).every((l) => !Object.keys(JOIN[l]).some((k) => /^(faqH|q\d+|a\d+)$/.test(k))));
 ok('join.html links: group, Play opt-in, store (same package)', join.includes(`href="${cfg.groupUrl}"`) && join.includes(`href="https://play.google.com/apps/testing/${cfg.packageName}"`) && join.includes(`href="https://play.google.com/store/apps/details?id=${cfg.packageName}"`));
-ok('join.html: 3 step cards, same-Gmail note, 8 FAQ entries', (join.match(/class="step"/g) || []).length === 3 && /Use the same Gmail/.test(join) && (join.match(/<details>/g) || []).length === 8);
+ok('join.html: 3 step cards, same-Gmail note, no FAQ entries', (join.match(/class="step"/g) || []).length === 3 && /Use the same Gmail/.test(join) && (join.match(/<details>/g) || []).length === 0);
 ok('join pages: all countries, no country restriction text', !/Thailand only|only in Thailand|เฉพาะผู้ที่อยู่ในประเทศไทย/.test(join + JSON.stringify(JOIN)));
 ok('optInLive=false locks steps 2-3 (and true would not)', cfg.optInLive ? !/data-locked/.test(join) : (join.match(/data-locked/g) || []).length === 2);
 ok('motion.css/js are byte copies of /workspace/shared/motion', ['motion.css', 'motion.js'].every((f) => !fs.existsSync('/workspace/shared/motion/' + f) || fs.readFileSync('/workspace/shared/motion/' + f).equals(fs.readFileSync(path.join(DOCS, 'assets', f)))));
@@ -86,7 +87,7 @@ if (hasApp) { const v = JSON.parse(read('app/version.json')); ok('app/version.js
   ok('new icon: blue Arch m favicon (#4f8ff7 -> #1d4ed8) and 192/512/apple-touch PNGs exist', /#4f8ff7/.test(read('assets/icon.svg')) && ['icon-192.png', 'icon-512.png', 'apple-touch-icon.png'].every((f) => fs.existsSync(path.join(DOCS, 'assets', f))));
   ok('design tokens: accent #2563eb / #1d4ed8, light bg #f4f5f7, dark bg #0b0c10', ['#2563eb', '#1d4ed8', '#f4f5f7', '#0b0c10', '#12141a', '#15171c'].every((c) => read('assets/site.css').toLowerCase().includes(c)));
   ok('screenshots on the intro page exist and are the v2 ones', ['shot-order-light', 'shot-order-dark', 'shot-manager', 'shot-cart-phone'].every((n) => fs.existsSync(path.join(DOCS, 'assets/img', n + '.webp')) && read('index.html').includes(n + '.webp')));
-  ok('join page keeps single shared group and says all countries (en)', /every country/i.test(JOIN.en.a6 + JOIN.en.desc) && read('join.html').includes('groups.google.com/g/motoraa-testers'));
+  ok('join page keeps single shared group and says all countries (en)', /every country/i.test(JOIN.en.desc) && read('join.html').includes('groups.google.com/g/motoraa-testers'));
 }
 
 // ---------- 2. browser ----------
