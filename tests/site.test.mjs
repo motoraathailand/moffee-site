@@ -148,11 +148,11 @@ for (const f of PAGES) for (const l of L) {
 // app hub button (owner rule 2026-11-02 13:45): visible, icon + label in 5 languages, >= 48px tall, on every page at both sizes
 {
   const LAB = { th: 'ดูแอปทั้งหมด', en: 'See all apps', ko: '모든 앱 보기', zh: '查看全部应用', hi: 'सभी ऐप देखें' };
-  ok('hub link (https://motoraathailand.github.io/) is on all 4 pages (header + footer)', PAGES.every((f) => (read(f).match(/href="https:\/\/motoraathailand\.github\.io\/"/g) || []).length === 2));
+  ok('hub link (https://motoraathailand.github.io/th) is on all 4 pages (header + footer)', PAGES.every((f) => (read(f).match(/href="https:\/\/motoraathailand\.github\.io\/th"/g) || []).length === 2));
   ok('hub labels exact in 5 languages (INTRO + JOIN)', L.every((l) => INTRO[l].hub === LAB[l] && JOIN[l].hub === LAB[l]));
   for (const f of PAGES) for (const l of L) for (const [w, h] of [[412, 915], [1280, 800]]) {
     const p = await open(f + '?lang=' + l, { w, h, motion: 'reduce' });
-    const r = await p.evaluate(() => [...document.querySelectorAll('a[href="https://motoraathailand.github.io/"]')].map((a) => { const b = a.getBoundingClientRect(), v = a.querySelector('span'); const sv = a.querySelector('svg'); return { h: Math.round(b.height), w: Math.round(b.width), svg: !!sv && sv.getBoundingClientRect().width >= 18, col: getComputedStyle(a).color, text: v && v.textContent.trim(), label: a.getAttribute('aria-label') || '', shown: v && getComputedStyle(v).display !== 'none' }; }));
+    const r = await p.evaluate(() => [...document.querySelectorAll('a[href="https://motoraathailand.github.io/th"]')].map((a) => { const b = a.getBoundingClientRect(), v = a.querySelector('span'); const sv = a.querySelector('svg'); return { h: Math.round(b.height), w: Math.round(b.width), svg: !!sv && sv.getBoundingClientRect().width >= 18, col: getComputedStyle(a).color, text: v && v.textContent.trim(), label: a.getAttribute('aria-label') || '', shown: v && getComputedStyle(v).display !== 'none' }; }));
     await p.evaluate(() => document.querySelector('.hub').scrollIntoView());
     const f2 = await p.evaluate(() => { const a = document.querySelector('a.hub'), b = a.getBoundingClientRect(); return b.height >= 48 && b.bottom <= innerHeight + 1 && b.top >= 0 && a.querySelector('svg') && a.textContent.trim(); });
     const hdr = r[0], ftr = r[1];
